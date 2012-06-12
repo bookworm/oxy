@@ -7,12 +7,16 @@ require 'active_support'
    
 @ps.instance_eval do
 
-## Convenience Methods
+  ## 
+  # Convenience Methods
+  #
   def doc()
     return current_document
   end
   
-## Add and Create Methods
+  ## 
+  # Add and Create Methods
+  #
   def create_document(options = {})
     make(OSA::AdobePhotoshopCS5::Document, nil, nil, {
     }.merge(options))
@@ -173,11 +177,14 @@ require 'active_support'
     return retvalue
   end
 
-## Find Methods
-# Its important to relize that these return hashes with the path and depth + the layer obj. e.g
-# {:path => '', :depth => , :obj => }. 
-# Its assumed that if you want just the layer object you'll know where its at and will thus use layers array directly.
-# i.e @ps.doc.art_layers.get_by_bame().
+  ## 
+  # Find Methods
+  #
+  
+  # Its important to relize that these return hashes with the path and depth + the layer obj. e.g
+  # {:path => '', :depth => , :obj => }.  
+  # Its assumed that if you want just the layer object you'll know where its at and will thus use layers array directly.
+  # i.e @ps.doc.art_layers.get_by_bame().
 
   @found = {:depth => 0, :path => [], :index_path => [] } 
   def find_layer_set(named, layer_sets = nil)
@@ -247,15 +254,19 @@ require 'active_support'
     return retvalue  
   end    
 
-## Move Methods           
-
-  # For documentation see move_layer_to_group()
+  ## 
+  # Move Methods 
+  #          
+  
+  # For documentation see 
+  #
+  # reference - move_layer_to_group()
   def move_layer_to_group(layer_name, group)
     doc  = @app.current_document    
     dest = find_layer_set(doc.layer_sets.to_a, group)   
-    src = find_layer(doc.art_layers.to_a, doc.layer_sets.to_a, layer_name)
+    src  = find_layer(doc.art_layers.to_a, doc.layer_sets.to_a, layer_name)
 
-    src[:depth] -= 1 if src[:depth] > 0
+    src[:depth]  -= 1 if src[:depth] > 0
     dest[:depth] -= 1 if dest[:depth] > 0
   
     move_js = <<-eos   
@@ -335,7 +346,7 @@ require 'active_support'
     src  = find_layer_set(doc.layer_sets.to_a, src)
     dest = find_layer_set(doc.layer_sets.to_a, dest)  
   
-    src[:depth] -= 1 if src[:depth] > 0
+    src[:depth]  -= 1 if src[:depth] > 0
     dest[:depth] -= 1 if dest[:depth] > 0
    
     move_js = <<-eos    
@@ -414,8 +425,10 @@ require 'active_support'
     return retvalue
   end  
   
-## Draw Methods
-# For any of these methods your going to need make sure you set the active layer before calling them.    
+  ## 
+  # Draw Methods
+  #
+  # For any of these methods your going to need make sure you set the active layer before calling them.    
 
   def draw_rec(offset, width, height, color = nil)
     x  = offset['left']
@@ -603,11 +616,10 @@ end
 
 @oxy = OXY.new
 
-class OXYText
-  
+class OXYText  
   @options = ActiveSupport::OrderedHash.new                                               
-  @path = { :path => [], :index_path => [] } 
-  @ps_obj = nil                         
+  @path    = { :path => [], :index_path => [] } 
+  @ps_obj  = nil                         
   
   # Whether or not this has been created in Photoshop yet.
   @created_in_ps = false
@@ -624,8 +636,9 @@ class OXYText
     send_to_ps 
   end  
    
-## Setters     
-   
+  ## 
+  # Setters     
+  #  
   def color=(rgb_color_hash)
     @options[:color] = rgb_color_hash     
   end        
